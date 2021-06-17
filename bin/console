@@ -1,0 +1,20 @@
+#!/usr/bin/env php
+<?php
+
+require_once dirname(dirname(__FILE__)).'/vendor/autoload.php';
+// load all commands here from an external php file
+$commands  = [
+    \App\Console\HumioCommand::class,
+];
+
+$application = new \Symfony\Component\Console\Application();
+
+foreach ($commands as $class) {
+    if (!class_exists($class)) {
+        throw new RuntimeException(sprintf('Class %s does not exist', $class));
+    }
+    $command = new $class();
+    $application->add($command);
+}
+
+$application->run();
